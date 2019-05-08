@@ -48,7 +48,9 @@ char *progname;
 
 #define TUN_SERVER_IPADDR "5.5.5.1"
 #define TUN_CLIENT_IPADDR "5.5.5.5"
+static const char *tun_ipaddr;
 
+/**************************************************************************
  * tun_ifup: ifconfig tun interface up with default IP address            *
  **************************************************************************/
 int tun_ifup(char *dev) {
