@@ -46,6 +46,19 @@
 int debug;
 char *progname;
 
+#define TUN_SERVER_IPADDR "5.5.5.1"
+#define TUN_CLIENT_IPADDR "5.5.5.5"
+
+ * tun_ifup: ifconfig tun interface up with default IP address            *
+ **************************************************************************/
+int tun_ifup(char *dev) {
+  char cmd[256];
+  memset(cmd, 0, sizeof(cmd));
+
+  sprintf(cmd, "ifconfig %s %s netmask 255.255.255.0 up", dev, tun_ipaddr);
+  return system(cmd);
+}
+
 /**************************************************************************
  * tun_alloc: allocates or reconnects to a tun/tap device. The caller     *
  *            must reserve enough space in *dev.                          *
@@ -76,6 +89,8 @@ int tun_alloc(char *dev, int flags) {
   }
 
   strcpy(dev, ifr.ifr_name);
+
+  tun_ifup(dev);
 
   return fd;
 }
@@ -203,10 +218,12 @@ int main(int argc, char *argv[]) {
         strncpy(if_name,optarg, IFNAMSIZ-1);
         break;
       case 's':
+        tun_ipaddr = TUN_SERVER_IPADDR;
         cliserv = SERVER;
         break;
       case 'c':
         cliserv = CLIENT;
+        tun_ipaddr = TUN_CLIENT_IPADDR;
         strncpy(remote_ip,optarg,15);
         break;
       case 'p':
