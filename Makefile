@@ -1,8 +1,9 @@
+CC?=gcc
 target:= simpletun
-all: $target
+all: ${target}
 
 simpletun:simpletun.c
-	$CC -Wall $< -o $@
+	${CC} -Wall $< -o $@
 
 clean:
-	rm -f *.o $target
+	rm -f *.o ${target}
